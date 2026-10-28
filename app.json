@@ -8,7 +8,8 @@
     "scheme": "pokefolio",
     "userInterfaceStyle": "light",
     "ios": {
-      "icon": "./assets/images/pokefolio-icon.png"
+      "icon": "./assets/images/pokefolio-icon.png",
+      "bundleIdentifier": "com.anonymous.pokefolio"
     },
     "android": {
       "adaptiveIcon": {

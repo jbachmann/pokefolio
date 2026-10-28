@@ -13,6 +13,16 @@ Use the Expo terminal to open iOS, Android, or web. For a web-only preview:
 
     npm run web
 
+To build and launch the app in the iOS Simulator with the Release configuration:
+
+    npm run ios:release
+
+Requires macOS, Xcode, and an installed iOS Simulator runtime. Expo generates the native iOS project on the first run, installs native dependencies, then builds, installs, and launches the app in the simulator. If prompted on the first run, choose an iOS bundle identifier. The Release build bundles JavaScript and assets, so it runs without a Metro development server. The first build can take several minutes.
+
+To choose a specific simulator:
+
+    npm run ios:release -- --device "<simulator name or UDID>"
+
 ## Explore
 
 - Browse all 1,025 Pokémon species. Search by name or Pokédex number, filter by type and generation, sort, or switch between grid and list views.
