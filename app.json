@@ -16,7 +16,8 @@
         "backgroundColor": "#285440",
         "foregroundImage": "./assets/images/pokefolio-icon.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.pokefolio"
     },
     "web": {
       "output": "server",

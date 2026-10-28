@@ -3,7 +3,7 @@ import React from "react";
 import Head from "expo-router/head";
 import { directory } from "@/lib/api";
 import { Link, usePathname } from "expo-router";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -31,10 +31,13 @@ export function Header() {
         : "Pokéfolio · A world of Pokémon";
   return (
     <>
-      <Head>
-        <title>{pageTitle}</title>
-        <meta name="theme-color" content={C.bg} />
-      </Head>
+      {/* Browser metadata only; native Head requires a configured Handoff origin. */}
+      {Platform.OS === "web" && (
+        <Head>
+          <title>{pageTitle}</title>
+          <meta name="theme-color" content={C.bg} />
+        </Head>
+      )}
       <SafeAreaView edges={["top"]} style={styles.header}>
         <View
           style={[
