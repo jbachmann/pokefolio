@@ -1,56 +1,61 @@
-# Welcome to your Expo app 👋
+# Pokéfolio
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile-first Pokémon field guide built with Expo SDK 58, React Native, and Expo Router. Forest green, warm ivory, official Pokémon artwork, and gentle motion make browsing feel like a little adventure.
 
-## Get started
+## Run
 
-1. Install dependencies
+Requires Node.js 20.19+ and npm.
 
-   ```bash
-   npm install
-   ```
+    npm install
+    npm start
 
-2. Start the app
+Use the Expo terminal to open iOS, Android, or web. For a web-only preview:
 
-   ```bash
-   npx expo start
-   ```
+    npm run web
 
-In the output, you'll find options to open the app in a
+## Explore
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Browse all 1,025 Pokémon species. Search by name or Pokédex number, filter by type and generation, sort, or switch between grid and list views.
+- Save favorites on your device.
+- Open a Pokémon to see its base stats, abilities, size, English field notes, type weaknesses, and evolution family, including branches and evolution conditions.
+- Create and rename multiple teams, add up to six unique Pokémon, and remove partners or delete a team.
+- Explore team offensive coverage, defensive risks, individual multipliers, immunities, and combined base stats.
+- Use the interactive 18-type matchup chart.
+- Animations respect reduced-motion settings. Artwork uses Expo Image caching, and directory cards use a virtualized list.
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Data and storage
 
-## Get a fresh project
+Data comes from [PokéAPI v2](https://pokeapi.co/docs/v2/). The app bundles a compact species index, the first 24 entries, and current-generation type data for immediate browsing. Other Pokémon, species descriptions, and evolution chains load on demand. Requests are deduplicated, fetched in batches of at most six, and cached locally for seven days. Pokémon detail responses are reduced before storage.
 
-When you're ready, run:
+Teams and favorites use AsyncStorage and stay on the current device/browser. There is no account or cloud sync. Uncached data and remote artwork require a connection; failures offer retry controls.
 
-```bash
-npm run reset-project
-```
+Team defense multiplies both defending types, preserving 4× weaknesses, ¼× resistances, and 0× immunities. Resistance counts include immunities. Offensive coverage considers the best matchup from each member's own types against a single defending type. Analysis excludes movesets, abilities, items, and battle conditions, so it is a type-planning guide rather than a battle simulator.
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+## Checks
 
-### Other setup steps
+    npm run lint
+    npm run typecheck
+    npm test
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+The matchup tests cover all 324 single-type pairs, dual-type multipliers, immunity precedence, aggregate team defense, offensive coverage, and empty teams.
 
-## Learn more
+    npx expo export --platform web
+    npx expo serve
 
-To learn more about developing your project with Expo, look at the following resources:
+The existing server web output uses Expo SDK 58 server rendering. Hosting the web export requires a server runtime. Native projects use Continuous Native Generation; configure native behavior in app.json rather than creating ios/ or android/ manually.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Project
 
-## Join the community
+- src/app/ — Expo Router screens
+- src/components/ — reusable interface, artwork cards, and animations
+- src/lib/api.ts — cached PokéAPI access and compact data models
+- src/lib/matchups.ts — pure type and team calculations
+- src/lib/theme.ts — shared visual tokens
+- src/providers/store.tsx — saved collection and team picker
+- tests/ — matchup regression checks
 
-Join our community of developers creating universal apps.
+## Credits
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Pokémon names, artwork, and related marks belong to Nintendo, Game Freak, and The Pokémon Company. Official artwork is served from [PokéAPI's sprites repository](https://github.com/PokeAPI/sprites). This is an unofficial fan project.
+
+DM Sans and Outfit are distributed under the SIL Open Font License; their licenses are included in assets/fonts/.

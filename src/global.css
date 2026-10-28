@@ -1,0 +1,35 @@
+:root {
+  color-scheme: light;
+  background: #f8f8f2;
+}
+html,
+body,
+#root {
+  min-height: 100%;
+}
+*:focus-visible {
+  outline: 2px solid #72935b !important;
+  outline-offset: 4px;
+}
+input:focus-visible {
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  [aria-label^="View "] img {
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  [aria-label^="View "]:hover img {
+    transform: translateY(-4px) scale(1.045);
+  }
+  a,
+  [role="button"] {
+    transition:
+      opacity 0.2s,
+      background-color 0.2s;
+  }
+}
+::selection {
+  background: #dce7c2;
+  color: #285440;
+}
