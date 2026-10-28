@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Pokéfolio",
-    "slug": "StickerSmash",
+    "slug": "pokefolio",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/pokefolio-icon.png",
-    "scheme": "stickersmash",
+    "scheme": "pokefolio",
     "userInterfaceStyle": "light",
     "ios": {
       "icon": "./assets/images/pokefolio-icon.png"
