@@ -1,0 +1,96 @@
+appId: com.anonymous.pokefolio
+name: DEX-003 Combine search, type, and generation filters
+properties:
+  scenarioId: DEX-003
+  feature: e2e/features/pokedex.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I search for "char"
+- runFlow:
+    file: ../helpers/search.yaml
+    env:
+      QUERY: char
+# And I select Fire and Generation I
+- tapOn:
+    id: filter-type-fire
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-count
+    text: Showing 5 of 5 Pokémon
+- tapOn:
+    text: Choose a generation
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: I · Kanto
+    waitToSettleTimeoutMs: 500
+# Then the results are Charmander, Charmeleon, and Charizard
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-count
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-count
+    text: Showing 3 of 3 Pokémon.*
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-0-name
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-0-name
+    text: Charmander
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-1-name
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-1-name
+    text: Charmeleon
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-2-name
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-2-name
+    text: Charizard
+# When I select Generation II
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- tapOn:
+    text: Choose a generation
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: II · Johto
+    waitToSettleTimeoutMs: 500
+# Then no Pokémon match
+- scrollUntilVisible:
+    element:
+      id: pokemon-empty
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-empty
+# When I clear the filters
+- tapOn:
+    text: Clear filters
+    waitToSettleTimeoutMs: 500
+# Then the initial collection is shown again
+- runFlow:
+    file: ../helpers/assert-initial.yaml

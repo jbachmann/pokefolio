@@ -1,0 +1,28 @@
+appId: com.anonymous.pokefolio
+---
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      text: Create a team
+    direction: UP
+    timeout: 10000
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: Create a team
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: team-name
+    waitToSettleTimeoutMs: 500
+- inputText: ${TEAM}
+- tapOn:
+    id: team-save
+    waitToSettleTimeoutMs: 500
+- extendedWaitUntil:
+    notVisible:
+      id: team-save
+    timeout: 10000
+- assertVisible:
+    id: team-selected-name
+    text: ${TEAM}

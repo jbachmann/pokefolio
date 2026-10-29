@@ -41,3 +41,6 @@ example
 # generated native folders
 /ios
 /android
+
+# End-user test reports and native build logs
+/artifacts/

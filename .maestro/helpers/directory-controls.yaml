@@ -1,0 +1,17 @@
+appId: com.anonymous.pokefolio
+---
+# A field behind the fixed header can still appear visible in the iOS tree.
+# Return to the hero before positioning the complete filter area.
+- scrollUntilVisible:
+    element:
+      text: A LITTLE CURIOSITY. A WORLD OF DISCOVERY.
+    direction: UP
+    timeout: 60000
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-count
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500

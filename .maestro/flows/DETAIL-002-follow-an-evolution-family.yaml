@@ -1,0 +1,64 @@
+appId: com.anonymous.pokefolio
+name: DETAIL-002 Follow an evolution family
+properties:
+  scenarioId: DETAIL-002
+  feature: e2e/features/details.feature
+tags:
+  - network
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I open Bulbasaur's evolution family
+- runFlow:
+    file: ../helpers/open-pokemon.yaml
+    env:
+      POKEMON_ID: "1"
+- scrollUntilVisible:
+    element:
+      id: evolution-open-1
+    direction: DOWN
+    timeout: 120000
+    centerElement: true
+    waitToSettleTimeoutMs: 500
+# Then Ivysaur requires level 16
+- scrollUntilVisible:
+    element:
+      id: evolution-open-2
+    direction: RIGHT
+    timeout: 10000
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: evolution-open-2
+    text: "Ivysaur: Level 16"
+# And Venusaur requires level 32
+- scrollUntilVisible:
+    element:
+      id: evolution-open-3
+    direction: RIGHT
+    timeout: 10000
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: evolution-open-3
+    text: "Venusaur: Level 32"
+# When I select Ivysaur in the family
+- scrollUntilVisible:
+    element:
+      id: evolution-open-2
+    direction: LEFT
+    timeout: 10000
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: evolution-open-2
+    waitToSettleTimeoutMs: 500
+# Then Ivysaur's details are shown
+- scrollUntilVisible:
+    element:
+      id: pokemon-detail-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-detail-name
+    text: Ivysaur

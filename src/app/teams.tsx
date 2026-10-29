@@ -73,7 +73,7 @@ function TeamAnalysis({ team }: { team: Team }) {
         <View style={[styles.insight, { backgroundColor: "#E8EEF0" }]}>
           <Icon name="stats-chart-outline" size={23} color="#7A9C9E" />
           <T style={styles.insightLabel}>TEAM BASE STAT TOTAL</T>
-          <T style={styles.bigNumber}>
+          <T testID="team-base-stat-total" style={styles.bigNumber}>
             {totals.reduce((a, b) => a + b, 0).toLocaleString("en-US")}
           </T>
           <T style={styles.insightText}>
@@ -96,6 +96,7 @@ function TeamAnalysis({ team }: { team: Team }) {
           <View style={styles.tabs}>
             {(["defense", "offense"] as const).map((t) => (
               <Pressable
+                testID={"team-analysis-tab-" + t}
                 key={t}
                 onPress={() => setTab(t)}
                 accessibilityRole="tab"
@@ -174,6 +175,7 @@ function TeamAnalysis({ team }: { team: Team }) {
                         ]}
                       >
                         <T
+                          testID={"team-matchup-" + tab + "-" + m.type + "-" + p.id}
                           style={{
                             fontSize: 11,
                             fontWeight: "600",
@@ -427,6 +429,7 @@ export default function Teams() {
             >
               {teams.map((t) => (
                 <Pressable
+                  testID={"team-tab-" + t.name}
                   key={t.id}
                   accessibilityRole="tab"
                   accessibilityState={{ selected: team.id === t.id }}
@@ -467,8 +470,8 @@ export default function Teams() {
             <View style={styles.roster}>
               <View style={styles.panelHeading}>
                 <View>
-                  <T style={styles.sectionTitle}>{team.name}</T>
-                  <T style={styles.helper}>
+                  <T testID="team-selected-name" style={styles.sectionTitle}>{team.name}</T>
+                  <T testID="team-member-count" style={styles.helper}>
                     {team.members.length} of 6 partners · Saved on this device
                   </T>
                 </View>
@@ -528,7 +531,7 @@ export default function Teams() {
                             }}
                             asChild
                           >
-                            <Pressable style={{ alignItems: "center" }}>
+                            <Pressable testID={"team-member-" + p.id} style={{ alignItems: "center" }}>
                               <Image
                                 source={{ uri: art(p.id) }}
                                 style={{ width: 95, height: 95 }}
@@ -602,6 +605,7 @@ export default function Teams() {
               >
                 <Icon name="sparkles-outline" size={30} color="#91A67B" />
                 <T
+                  testID="team-analysis-empty"
                   style={{
                     fontFamily: font.display,
                     fontSize: 26,
@@ -651,6 +655,7 @@ export default function Teams() {
           Something memorable for your favorite little crew.
         </T>
         <TextInput
+          testID="team-name"
           accessibilityLabel="Team name"
           value={name}
           onChangeText={setName}
@@ -663,6 +668,7 @@ export default function Teams() {
           returnKeyType="done"
         />
         <Button
+          testID="team-save"
           style={{ marginTop: 15 }}
           onPress={save}
           disabled={!name.trim()}
@@ -681,6 +687,7 @@ export default function Teams() {
           new adventure.
         </T>
         <Button
+          testID="team-delete-confirm"
           onPress={() => {
             if (team) deleteTeam(team.id);
             setConfirmDelete(false);

@@ -81,6 +81,7 @@ export function Header() {
               return (
                 <Link href={item.href} key={item.href} asChild>
                   <Pressable
+                    testID={"nav-" + (item.href === "/" ? "pokedex" : item.href.slice(1))}
                     accessibilityRole="tab"
                     accessibilityLabel={item.label}
                     accessibilityState={{ selected: active }}

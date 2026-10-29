@@ -1,0 +1,79 @@
+appId: com.anonymous.pokefolio
+name: TEAM-008 Remove the last partner
+properties:
+  scenarioId: TEAM-008
+  feature: e2e/features/teams.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# Given Trail Friends contains only Bulbasaur
+- runFlow:
+    file: ../helpers/create-team.yaml
+    env:
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "1"
+      TEAM: Trail Friends
+# When I remove Bulbasaur
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-selected-name
+    text: Trail Friends
+- assertVisible:
+    id: team-member-count
+    text: 1 of 6 partners.*
+- scrollUntilVisible:
+    element:
+      id: team-member-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-1
+- scrollUntilVisible:
+    element:
+      text: Remove bulbasaur from team
+    direction: UP
+    timeout: 10000
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: Remove bulbasaur from team
+    waitToSettleTimeoutMs: 500
+- runFlow:
+    file: ../helpers/wait-for-notice.yaml
+# Then the team remains with no partners
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-count
+    text: 0 of 6 partners.*
+# And the empty-analysis invitation replaces the populated analysis
+- scrollUntilVisible:
+    element:
+      id: team-analysis-empty
+    direction: DOWN
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-analysis-empty
+- assertNotVisible:
+    id: team-base-stat-total

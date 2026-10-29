@@ -1,0 +1,40 @@
+appId: com.anonymous.pokefolio
+name: DEX-005 Recover from an unsuccessful search
+properties:
+  scenarioId: DEX-005
+  feature: e2e/features/pokedex.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I search for "not-a-pokemon"
+- runFlow:
+    file: ../helpers/search.yaml
+    env:
+      QUERY: not-a-pokemon
+# Then I see the no-results message
+- scrollUntilVisible:
+    element:
+      id: pokemon-empty
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-empty
+# When I clear the filters
+- tapOn:
+    text: Clear filters
+    waitToSettleTimeoutMs: 500
+# Then Pokémon are visible again
+- runFlow:
+    file: ../helpers/assert-initial.yaml
+- scrollUntilVisible:
+    element:
+      id: pokemon-open-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-open-1

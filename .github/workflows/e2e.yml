@@ -1,0 +1,100 @@
+name: End-user tests
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: end-user-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:e2e:specs
+
+  ios:
+    needs: checks
+    runs-on: macos-26
+    timeout-minutes: 90
+    env:
+      CI: "1"
+      MAESTRO_VERSION: "2.12.0"
+      MAESTRO_CLI_NO_ANALYTICS: "1"
+      MAESTRO_CLI_ANALYSIS_NOTIFICATION_DISABLED: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - name: Install pinned Maestro CLI
+        run: |
+          curl -fL --retry 3 "https://github.com/mobile-dev-inc/Maestro/releases/download/cli-${MAESTRO_VERSION}/maestro.zip" -o "${RUNNER_TEMP}/maestro.zip"
+          unzip -q "${RUNNER_TEMP}/maestro.zip" -d "${RUNNER_TEMP}/maestro-cli"
+          echo "${RUNNER_TEMP}/maestro-cli/maestro/bin" >> "$GITHUB_PATH"
+      - name: Select an available iPhone simulator
+        run: |
+          xcodebuild -version
+          xcrun simctl list devices available --json > "${RUNNER_TEMP}/simulators.json"
+          node <<'NODE'
+          const fs = require("node:fs");
+          const data = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/simulators.json", "utf8"));
+          const runtime = Object.keys(data.devices).filter(key => key.includes(".iOS-"))
+            .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
+            .find(key => data.devices[key].some(device => device.isAvailable && device.name.startsWith("iPhone")));
+          const phones = data.devices[runtime]?.filter(device => device.isAvailable && device.name.startsWith("iPhone"));
+          const device = phones?.find(device => device.name.endsWith(" Pro")) ?? phones?.[0];
+          if (!device) throw new Error("No available iPhone simulator");
+          fs.appendFileSync(process.env.GITHUB_ENV, "SIMULATOR_UDID=" + device.udid + "\n");
+          console.log("Selected " + runtime + " / " + device.name + " / " + device.udid);
+          NODE
+      - name: Boot simulator
+        run: |
+          xcrun simctl boot "$SIMULATOR_UDID"
+          xcrun simctl bootstatus "$SIMULATOR_UDID" -b
+      # Local simulator builds are explicitly allowed for this workflow.
+      # Expo generates ios/; do not maintain native project changes by hand.
+      - name: Build and install the standalone Release app
+        run: |
+          mkdir -p artifacts
+          set -o pipefail
+          npx expo run:ios --configuration Release --device "$SIMULATOR_UDID" --no-bundler 2>&1 | tee artifacts/ios-build.log
+      - name: Smoke tests on pull requests
+        if: github.event_name == 'pull_request'
+        run: npm run test:e2e:smoke -- --device "$SIMULATOR_UDID"
+      - name: Full suite on main and manual runs
+        if: github.event_name != 'pull_request'
+        run: npm run test:e2e -- --device "$SIMULATOR_UDID"
+      - name: Collect simulator screenshot
+        if: failure()
+        run: |
+          mkdir -p artifacts
+          xcrun simctl io "$SIMULATOR_UDID" screenshot artifacts/failure-screen.png
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-end-user-tests-${{ github.run_attempt }}
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 14

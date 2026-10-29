@@ -1,0 +1,14 @@
+appId: com.anonymous.pokefolio
+---
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-count
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-count
+    text: Showing 24 of 1,025 Pokémon.*

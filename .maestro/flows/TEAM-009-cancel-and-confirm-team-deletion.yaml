@@ -1,0 +1,46 @@
+appId: com.anonymous.pokefolio
+name: TEAM-009 Cancel and confirm team deletion
+properties:
+  scenarioId: TEAM-009
+  feature: e2e/features/teams.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# Given I have one saved team
+- runFlow:
+    file: ../helpers/create-team.yaml
+    env:
+      TEAM: Trail Friends
+# When I request deletion and choose to keep my team
+- tapOn:
+    text: Delete team
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: Keep my team
+    waitToSettleTimeoutMs: 500
+# Then the team remains
+- assertVisible:
+    id: team-selected-name
+    text: Trail Friends
+# When I request deletion and confirm
+- tapOn:
+    text: Delete team
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: team-delete-confirm
+    waitToSettleTimeoutMs: 500
+- runFlow:
+    file: ../helpers/wait-for-notice.yaml
+# Then I see the first-team invitation
+- assertVisible: Every adventure starts with a friend\.
+# When I restart the app without clearing its data
+- runFlow:
+    file: ../helpers/restart.yaml
+# Then the deleted team remains absent
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- assertVisible: Every adventure starts with a friend\.
+- assertNotVisible:
+    id: team-tab-Trail Friends

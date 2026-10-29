@@ -55,6 +55,7 @@ export function Button({
   variant = "primary",
   style,
   disabled = false,
+  testID,
 }: {
   children: React.ReactNode;
   onPress: () => void;
@@ -62,11 +63,14 @@ export function Button({
   variant?: "primary" | "light" | "outline";
   style?: ViewStyle;
   disabled?: boolean;
+  testID?: string;
 }) {
   const light = variant === "light";
   return (
     <Pressable
+      testID={testID}
       accessibilityRole="button"
+      accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
@@ -108,17 +112,23 @@ export function IconButton({
   label,
   color = C.ink,
   style,
+  testID,
+  selected,
 }: {
   name: React.ComponentProps<typeof Ionicons>["name"];
   onPress: () => void;
   label: string;
   color?: string;
   style?: StyleProp<ViewStyle>;
+  testID?: string;
+  selected?: boolean;
 }) {
   return (
     <Pressable
+      testID={testID}
       accessibilityRole="button"
       accessibilityLabel={label}
+      accessibilityState={{ selected }}
       onPress={onPress}
       style={({ pressed }) => [
         s.iconButton,
@@ -133,13 +143,16 @@ export function IconButton({
 export function TypeBadge({
   type,
   small = false,
+  testID,
 }: {
   type: string;
   small?: boolean;
+  testID?: string;
 }) {
   const c = typeColors[type] ?? typeColors.normal;
   return (
     <View
+      testID={testID}
       style={[
         s.badge,
         { backgroundColor: c.bg },
@@ -344,7 +357,7 @@ export function Sheet({
         <View accessibilityViewIsModal style={s.sheet}>
           <View style={s.sheetHeader}>
             <T style={s.sheetTitle}>{heading}</T>
-            <IconButton name="close" label="Close dialog" onPress={onClose} />
+            <IconButton testID="dialog-close" name="close" label="Close dialog" onPress={onClose} />
           </View>
           <ScrollView
             keyboardShouldPersistTaps="handled"

@@ -1,0 +1,16 @@
+appId: com.anonymous.pokefolio
+---
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- tapOn:
+    id: pokemon-search
+    waitToSettleTimeoutMs: 500
+- eraseText: 100
+- inputText: ${QUERY}
+# Use the actual software Search key. Hardware Enter does not reliably submit
+# this field on iOS, and hideKeyboard gestures can activate a result card.
+- tapOn:
+    text: "(?i)search"
+    waitToSettleTimeoutMs: 500
+- assertNotVisible:
+    text: "(?i)search"

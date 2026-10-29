@@ -1,0 +1,60 @@
+appId: com.anonymous.pokefolio
+name: DEX-006 Discover another page
+properties:
+  scenarioId: DEX-006
+  feature: e2e/features/pokedex.feature
+tags:
+  - network
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I request more Pokémon
+- scrollUntilVisible:
+    element:
+      id: pokemon-load-more
+    direction: DOWN
+    timeout: 60000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: pokemon-load-more
+    waitToSettleTimeoutMs: 500
+# Then the displayed result count increases from 24 to 48
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-count
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-count
+    text: Showing 48 of 1,025 Pokémon.*
+# And Pikachu can be opened from its loaded card
+- scrollUntilVisible:
+    element:
+      id: pokemon-open-25
+    direction: DOWN
+    timeout: 60000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: pokemon-open-25
+    waitToSettleTimeoutMs: 500
+- extendedWaitUntil:
+    visible:
+      id: pokemon-detail-number
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: pokemon-detail-name
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-detail-name
+    text: Pikachu

@@ -49,6 +49,15 @@ Team defense multiplies both defending types, preserving 4× weaknesses, ¼× re
 
 The matchup tests cover all 324 single-type pairs, dual-type multipliers, immunity precedence, aggregate team defense, offensive coverage, and empty teams.
 
+End-user behavior is specified in Gherkin and verified by 22 iOS Maestro flows,
+including six smoke scenarios. Three outage/recovery specifications are manual.
+See [the end-user testing guide](e2e/README.md) for simulator setup, execution,
+GitHub CI, and the checked links between specifications and flows.
+
+    npm run test:e2e:specs
+    npm run test:e2e:smoke -- --device "<simulator UDID>"
+    npm run test:e2e -- --device "<simulator UDID>"
+
     npx expo export --platform web
     npx expo serve
 

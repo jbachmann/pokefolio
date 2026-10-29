@@ -168,6 +168,7 @@ export default function Index() {
         <View style={[styles.search, mobile && { minWidth: "100%" }]}>
           <Icon name="search-outline" size={19} color="#899283" />
           <TextInput
+            testID="pokemon-search"
             accessibilityLabel="Search Pokémon by name or number"
             value={query}
             onChangeText={(text) => updateFilter(() => setQuery(text))}
@@ -255,6 +256,7 @@ export default function Index() {
           ),
         ].map((t) => (
           <Pressable
+            testID={"filter-type-" + t}
             accessibilityRole="button"
             accessibilityState={{ selected: type === t }}
             key={t}
@@ -288,7 +290,7 @@ export default function Index() {
         ))}
       </ScrollView>
       <View style={styles.resultBar}>
-        <T style={{ fontSize: 11, color: "#8C9587" }}>
+        <T testID="pokemon-result-count" style={{ fontSize: 11, color: "#8C9587" }}>
           Showing{" "}
           <T style={{ fontSize: 11, fontWeight: "700", color: "#596C52" }}>
             {Math.min(limit, filtered.length)}
@@ -300,6 +302,7 @@ export default function Index() {
           <IconButton
             name="grid-outline"
             label="Grid view"
+            selected={!listMode}
             color={!listMode ? C.green : "#A4AD9C"}
             onPress={() => setListMode(false)}
             style={[
@@ -310,6 +313,7 @@ export default function Index() {
           <IconButton
             name="list-outline"
             label="List view"
+            selected={listMode}
             color={listMode ? C.green : "#A4AD9C"}
             onPress={() => setListMode(true)}
             style={[
@@ -367,6 +371,7 @@ export default function Index() {
                 asChild
               >
                 <Pressable
+                  testID={"pokemon-open-" + pokemon.id}
                   style={{
                     flexDirection: "row",
                     alignItems: "center",
@@ -384,6 +389,7 @@ export default function Index() {
                       {number(pokemon.id)}
                     </T>
                     <T
+                      testID={"pokemon-result-" + index + "-name"}
                       style={{
                         fontFamily: font.display,
                         fontSize: 20,
@@ -414,6 +420,7 @@ export default function Index() {
           <View style={styles.empty}>
             <Icon name="search-outline" size={36} color="#95A384" />
             <T
+              testID="pokemon-empty"
               style={{ fontFamily: font.display, fontSize: 25, marginTop: 16 }}
             >
               No Pokémon on this trail.
@@ -439,6 +446,7 @@ export default function Index() {
             {visible.length < filtered.length && (
               <View style={styles.loadMore}>
                 <Button
+                  testID="pokemon-load-more"
                   variant="outline"
                   onPress={() => setLimit((l) => l + 24)}
                   icon={loading ? undefined : "add"}

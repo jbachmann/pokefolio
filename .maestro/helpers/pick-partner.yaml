@@ -1,0 +1,22 @@
+appId: com.anonymous.pokefolio
+---
+- tapOn:
+    id: nav-pokedex
+    waitToSettleTimeoutMs: 500
+- runFlow:
+    file: ../helpers/search.yaml
+    env:
+      QUERY: ${POKEMON_ID}
+- scrollUntilVisible:
+    element:
+      id: pokemon-add-${POKEMON_ID}
+    direction: DOWN
+    timeout: 10000
+    centerElement: true
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: pokemon-add-${POKEMON_ID}
+    waitToSettleTimeoutMs: 500
+- extendedWaitUntil:
+    visible: A new team member
+    timeout: 10000

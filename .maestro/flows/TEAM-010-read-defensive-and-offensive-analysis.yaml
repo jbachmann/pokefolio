@@ -1,0 +1,128 @@
+appId: com.anonymous.pokefolio
+name: TEAM-010 Read defensive and offensive analysis
+properties:
+  scenarioId: TEAM-010
+  feature: e2e/features/teams.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# Given my team contains only Charizard
+- runFlow:
+    file: ../helpers/create-team.yaml
+    env:
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "6"
+      TEAM: Trail Friends
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+# Then its base stat total is 534
+- scrollUntilVisible:
+    element:
+      id: team-base-stat-total
+    direction: DOWN
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-base-stat-total
+    text: "534"
+# And its defensive matchups show Rock at 4 times damage
+- scrollUntilVisible:
+    element:
+      id: team-matchup-defense-rock-6
+    direction: DOWN
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-matchup-defense-rock-6
+    text: 4×
+# And Grass at one quarter damage
+- scrollUntilVisible:
+    element:
+      id: team-matchup-defense-grass-6
+    direction: UP
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-matchup-defense-grass-6
+    text: 0\.25×
+# And Ground at zero damage
+- scrollUntilVisible:
+    element:
+      id: team-matchup-defense-ground-6
+    direction: DOWN
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-matchup-defense-ground-6
+    text: 0×
+# When I switch to offensive analysis
+- scrollUntilVisible:
+    element:
+      id: team-base-stat-total
+    direction: UP
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: team-analysis-tab-offense
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-analysis-tab-offense
+    selected: true
+# Then Grass shows 2 times damage
+- scrollUntilVisible:
+    element:
+      id: team-matchup-offense-grass-6
+    direction: DOWN
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-matchup-offense-grass-6
+    text: 2×
+# When I remove Charizard
+- scrollUntilVisible:
+    element:
+      text: Good company. Great possibilities.
+    direction: UP
+    timeout: 30000
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      text: Remove charizard from team
+    direction: UP
+    timeout: 30000
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: Remove charizard from team
+    waitToSettleTimeoutMs: 500
+- runFlow:
+    file: ../helpers/wait-for-notice.yaml
+# Then the populated analysis is replaced by the empty-team invitation
+- scrollUntilVisible:
+    element:
+      id: team-analysis-empty
+    direction: DOWN
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-analysis-empty
+- assertNotVisible:
+    id: team-base-stat-total

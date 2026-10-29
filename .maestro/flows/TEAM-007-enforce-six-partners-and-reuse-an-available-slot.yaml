@@ -1,0 +1,290 @@
+appId: com.anonymous.pokefolio
+name: TEAM-007 Enforce six partners and reuse an available slot
+properties:
+  scenarioId: TEAM-007
+  feature: e2e/features/teams.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# Given Trail Friends contains Bulbasaur, Charmander, Squirtle, Caterpie, Weedle, and Pidgey
+- runFlow:
+    file: ../helpers/create-team.yaml
+    env:
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "1"
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "4"
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "7"
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "10"
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "13"
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "16"
+      TEAM: Trail Friends
+# When I try to add Rattata
+- runFlow:
+    file: ../helpers/pick-partner.yaml
+    env:
+      POKEMON_ID: "19"
+- tapOn:
+    id: picker-team-Trail Friends
+    waitToSettleTimeoutMs: 500
+# Then the picker explains that the team is full
+- assertVisible: This team is full\. Make room for a new friend first\.
+# And the roster is unchanged
+- tapOn:
+    id: dialog-close
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-selected-name
+    text: Trail Friends
+- assertVisible:
+    id: team-member-count
+    text: 6 of 6 partners.*
+- scrollUntilVisible:
+    element:
+      id: team-member-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-1
+- scrollUntilVisible:
+    element:
+      id: team-member-4
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-4
+- scrollUntilVisible:
+    element:
+      id: team-member-7
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-7
+- scrollUntilVisible:
+    element:
+      id: team-member-10
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-10
+- scrollUntilVisible:
+    element:
+      id: team-member-13
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-13
+- scrollUntilVisible:
+    element:
+      id: team-member-16
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-16
+# When I remove Pidgey and add Rattata
+- scrollUntilVisible:
+    element:
+      text: Remove pidgey from team
+    direction: UP
+    timeout: 10000
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: Remove pidgey from team
+    waitToSettleTimeoutMs: 500
+- runFlow:
+    file: ../helpers/wait-for-notice.yaml
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "19"
+      TEAM: Trail Friends
+# Then the team contains six unique partners including Rattata
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-selected-name
+    text: Trail Friends
+- assertVisible:
+    id: team-member-count
+    text: 6 of 6 partners.*
+- scrollUntilVisible:
+    element:
+      id: team-member-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-1
+- scrollUntilVisible:
+    element:
+      id: team-member-4
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-4
+- scrollUntilVisible:
+    element:
+      id: team-member-7
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-7
+- scrollUntilVisible:
+    element:
+      id: team-member-10
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-10
+- scrollUntilVisible:
+    element:
+      id: team-member-13
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-13
+- scrollUntilVisible:
+    element:
+      id: team-member-19
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-19
+# When I restart the app without clearing its data
+- runFlow:
+    file: ../helpers/restart.yaml
+# Then the updated roster is retained
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-selected-name
+    text: Trail Friends
+- assertVisible:
+    id: team-member-count
+    text: 6 of 6 partners.*
+- scrollUntilVisible:
+    element:
+      id: team-member-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-1
+- scrollUntilVisible:
+    element:
+      id: team-member-4
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-4
+- scrollUntilVisible:
+    element:
+      id: team-member-7
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-7
+- scrollUntilVisible:
+    element:
+      id: team-member-10
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-10
+- scrollUntilVisible:
+    element:
+      id: team-member-13
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-13
+- scrollUntilVisible:
+    element:
+      id: team-member-19
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-19

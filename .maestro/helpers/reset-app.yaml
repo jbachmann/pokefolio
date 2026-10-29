@@ -1,0 +1,8 @@
+appId: com.anonymous.pokefolio
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: nav-pokedex
+    timeout: 10000

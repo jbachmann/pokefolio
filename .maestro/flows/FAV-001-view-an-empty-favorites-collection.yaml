@@ -1,0 +1,32 @@
+appId: com.anonymous.pokefolio
+name: FAV-001 View an empty favorites collection
+properties:
+  scenarioId: FAV-001
+  feature: e2e/features/favorites.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I show only favorites
+- tapOn:
+    text: Show favorites
+    waitToSettleTimeoutMs: 500
+# Then no Pokémon match
+- scrollUntilVisible:
+    element:
+      id: pokemon-empty
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-empty
+# When I turn off the favorites filter
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- tapOn:
+    text: Show favorites
+    waitToSettleTimeoutMs: 500
+# Then the initial collection is shown again
+- runFlow:
+    file: ../helpers/assert-initial.yaml

@@ -1,0 +1,87 @@
+appId: com.anonymous.pokefolio
+name: TEAM-004 Rename and retain a saved team
+properties:
+  scenarioId: TEAM-004
+  feature: e2e/features/teams.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# Given Trail Friends contains Bulbasaur and Charmander
+- runFlow:
+    file: ../helpers/create-team.yaml
+    env:
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "1"
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "4"
+      TEAM: Trail Friends
+# When I rename the team to "Forest Friends"
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: Rename team
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: team-name
+    waitToSettleTimeoutMs: 500
+- eraseText: 100
+- inputText: Forest Friends
+- tapOn:
+    id: team-save
+    waitToSettleTimeoutMs: 500
+# And I restart the app without clearing its data
+- runFlow:
+    file: ../helpers/restart.yaml
+# Then Forest Friends still contains Bulbasaur and Charmander
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-selected-name
+    text: Forest Friends
+- assertVisible:
+    id: team-member-count
+    text: 2 of 6 partners.*
+- scrollUntilVisible:
+    element:
+      id: team-member-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-1
+- scrollUntilVisible:
+    element:
+      id: team-member-4
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-4
+# And the old team name is absent
+- assertNotVisible:
+    id: team-tab-Trail Friends

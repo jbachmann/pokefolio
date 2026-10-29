@@ -1,0 +1,6 @@
+appId: com.anonymous.pokefolio
+---
+# The notice auto-expires. Tapping it near expiry can hit the content underneath.
+# Its absence is a settling condition; roster assertions establish success.
+- assertNotVisible:
+    id: collection-notice

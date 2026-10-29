@@ -1,0 +1,198 @@
+appId: com.anonymous.pokefolio
+name: DETAIL-001 Read a Pokémon's field guide
+properties:
+  scenarioId: DETAIL-001
+  feature: e2e/features/details.feature
+tags:
+  - network
+  - smoke
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I open Bulbasaur
+- runFlow:
+    file: ../helpers/open-pokemon.yaml
+    env:
+      POKEMON_ID: "1"
+# Then I see its number, Grass and Poison types, height, and weight
+- scrollUntilVisible:
+    element:
+      id: pokemon-detail-number
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-detail-number
+    text: "#001"
+- scrollUntilVisible:
+    element:
+      id: pokemon-detail-type-grass
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-detail-type-grass
+- assertVisible:
+    id: pokemon-detail-type-poison
+- scrollUntilVisible:
+    element:
+      id: pokemon-fact-height
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-fact-height
+    text: 0\.7 m
+- assertVisible:
+    id: pokemon-fact-weight
+    text: 6\.9 kg
+# And I see its abilities and English field notes
+- scrollUntilVisible:
+    element:
+      id: pokemon-abilities
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-abilities
+    text: Overgrow.*Chlorophyll
+- scrollUntilVisible:
+    element:
+      id: pokemon-field-notes
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- extendedWaitUntil:
+    visible:
+      id: pokemon-field-notes
+    timeout: 120000
+- assertVisible:
+    id: pokemon-field-notes
+    text: .+
+# And its six base stats total 318
+- scrollUntilVisible:
+    element:
+      id: pokemon-stat-0
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-stat-0
+    text: "45"
+- scrollUntilVisible:
+    element:
+      id: pokemon-stat-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-stat-1
+    text: "49"
+- scrollUntilVisible:
+    element:
+      id: pokemon-stat-2
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-stat-2
+    text: "49"
+- scrollUntilVisible:
+    element:
+      id: pokemon-stat-3
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-stat-3
+    text: "65"
+- scrollUntilVisible:
+    element:
+      id: pokemon-stat-4
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-stat-4
+    text: "65"
+- scrollUntilVisible:
+    element:
+      id: pokemon-stat-5
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-stat-5
+    text: "45"
+- scrollUntilVisible:
+    element:
+      id: pokemon-stat-total
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-stat-total
+    text: "318"
+# And its weaknesses include Fire, Ice, Flying, and Psychic
+- scrollUntilVisible:
+    element:
+      id: pokemon-weakness-fire
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-weakness-fire
+- scrollUntilVisible:
+    element:
+      id: pokemon-weakness-ice
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-weakness-ice
+- scrollUntilVisible:
+    element:
+      id: pokemon-weakness-flying
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-weakness-flying
+- scrollUntilVisible:
+    element:
+      id: pokemon-weakness-psychic
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-weakness-psychic
+# When I return to the Pokédex
+- scrollUntilVisible:
+    element:
+      text: Back to Pokédex
+    direction: UP
+    timeout: 10000
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: Back to Pokédex
+    waitToSettleTimeoutMs: 500
+# Then I can browse Pokémon again
+- runFlow:
+    file: ../helpers/assert-initial.yaml

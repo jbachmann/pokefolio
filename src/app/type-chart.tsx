@@ -29,12 +29,14 @@ export default function TypeChart() {
           </T>
         </View>
         <ScrollView
+          testID="type-options"
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 7, marginBottom: 22 }}
         >
           {TYPES.map((type) => (
             <Pressable
+              testID={"type-select-" + type}
               key={type}
               onPress={() => setSelected(type)}
               accessibilityLabel={"Explore " + type + " matchups"}
@@ -55,6 +57,7 @@ export default function TypeChart() {
             <View style={{ flex: 0.8 }}>
               <Icon name="sparkles-outline" color="#819967" size={26} />
               <T
+                testID="type-summary-name"
                 style={{
                   fontFamily: font.display,
                   fontSize: 31,
@@ -81,7 +84,7 @@ export default function TypeChart() {
                 <T style={styles.smallLabel}>SUPER EFFECTIVE AGAINST · 2×</T>
                 <View style={styles.badges}>
                   {strong.length ? (
-                    strong.map((t) => <TypeBadge key={t} type={t} />)
+                    strong.map((t) => <TypeBadge testID={"type-strong-" + t} key={t} type={t} />)
                   ) : (
                     <T style={styles.subtitle}>No super-effective matchups</T>
                   )}
@@ -91,7 +94,7 @@ export default function TypeChart() {
                 <T style={styles.smallLabel}>WEAK TO · 2× INCOMING DAMAGE</T>
                 <View style={styles.badges}>
                   {weak.length ? (
-                    weak.map((t) => <TypeBadge key={t} type={t} />)
+                    weak.map((t) => <TypeBadge testID={"type-weak-" + t} key={t} type={t} />)
                   ) : (
                     <T style={styles.subtitle}>No type weaknesses</T>
                   )}
@@ -102,7 +105,7 @@ export default function TypeChart() {
                   <T style={styles.smallLabel}>IMMUNE TO · 0×</T>
                   <View style={styles.badges}>
                     {immune.map((t) => (
-                      <TypeBadge key={t} type={t} />
+                      <TypeBadge testID={"type-immune-" + t} key={t} type={t} />
                     ))}
                   </View>
                 </View>
@@ -141,7 +144,7 @@ export default function TypeChart() {
               <T style={{ fontSize: 10, color: "#8F87A1" }}>0× Immune</T>
             </View>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator>
+          <ScrollView testID="type-matrix" horizontal showsHorizontalScrollIndicator>
             <View style={{ paddingBottom: 10 }}>
               <View style={styles.row}>
                 <View style={styles.label}>
@@ -152,6 +155,7 @@ export default function TypeChart() {
                 </View>
                 {TYPES.map((t) => (
                   <Pressable
+                    testID={"type-heading-" + t}
                     key={t}
                     onPress={() => setSelected(t)}
                     style={styles.cell}
@@ -189,6 +193,8 @@ export default function TypeChart() {
                     return (
                       <View style={styles.cell} key={defense}>
                         <View
+                          testID={"type-cell-" + attack + "-" + defense}
+                          accessible
                           accessibilityLabel={
                             attack +
                             " against " +

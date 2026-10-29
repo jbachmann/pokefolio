@@ -1,0 +1,74 @@
+appId: com.anonymous.pokefolio
+name: DEX-002 Search by name and Pokédex number
+properties:
+  scenarioId: DEX-002
+  feature: e2e/features/pokedex.feature
+tags:
+  - smoke
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I search for " BuLbAsAuR "
+- runFlow:
+    file: ../helpers/search.yaml
+    env:
+      QUERY: " BuLbAsAuR "
+# Then Bulbasaur is the only result
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-count
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-count
+    text: Showing 1 of 1 Pokémon.*
+- scrollUntilVisible:
+    element:
+      id: pokemon-open-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-open-1
+# When I replace the search with "#0001"
+- runFlow:
+    file: ../helpers/search.yaml
+    env:
+      QUERY: "#0001"
+# Then Bulbasaur is the only result
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-count
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-count
+    text: Showing 1 of 1 Pokémon.*
+- scrollUntilVisible:
+    element:
+      id: pokemon-open-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-open-1
+# When I clear the search
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- tapOn:
+    text: Clear search
+    waitToSettleTimeoutMs: 500
+# Then the initial collection is shown again
+- runFlow:
+    file: ../helpers/assert-initial.yaml

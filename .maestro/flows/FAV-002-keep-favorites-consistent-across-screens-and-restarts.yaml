@@ -1,0 +1,95 @@
+appId: com.anonymous.pokefolio
+name: FAV-002 Keep favorites consistent across screens and restarts
+properties:
+  scenarioId: FAV-002
+  feature: e2e/features/favorites.feature
+tags:
+  - smoke
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I favorite Bulbasaur from its card
+- scrollUntilVisible:
+    element:
+      id: pokemon-favorite-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: pokemon-favorite-1
+    waitToSettleTimeoutMs: 500
+# And I open its details
+- tapOn:
+    id: pokemon-open-1
+    waitToSettleTimeoutMs: 500
+- extendedWaitUntil:
+    visible:
+      id: pokemon-detail-number
+    timeout: 10000
+# Then Bulbasaur is marked as a favorite
+- assertVisible:
+    id: pokemon-detail-favorite
+    selected: true
+# When I restart the app without clearing its data
+- runFlow:
+    file: ../helpers/restart.yaml
+# And I show only favorites
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- tapOn:
+    text: Show favorites
+    waitToSettleTimeoutMs: 500
+# Then Bulbasaur is the only result
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-count
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-count
+    text: Showing 1 of 1 Pokémon.*
+- scrollUntilVisible:
+    element:
+      id: pokemon-open-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-open-1
+# When I open Bulbasaur and remove its favorite status
+- tapOn:
+    id: pokemon-open-1
+    waitToSettleTimeoutMs: 500
+- extendedWaitUntil:
+    visible:
+      id: pokemon-detail-favorite
+    timeout: 10000
+- tapOn:
+    id: pokemon-detail-favorite
+    waitToSettleTimeoutMs: 500
+# And I restart the app without clearing its data
+- runFlow:
+    file: ../helpers/restart.yaml
+# And I show only favorites
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- tapOn:
+    text: Show favorites
+    waitToSettleTimeoutMs: 500
+# Then no Pokémon match
+- scrollUntilVisible:
+    element:
+      id: pokemon-empty
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-empty

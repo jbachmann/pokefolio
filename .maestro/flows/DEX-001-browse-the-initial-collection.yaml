@@ -1,0 +1,49 @@
+appId: com.anonymous.pokefolio
+name: DEX-001 Browse the initial collection
+properties:
+  scenarioId: DEX-001
+  feature: e2e/features/pokedex.feature
+tags:
+  - smoke
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# Then the Pokédex shows the first 24 of 1,025 Pokémon
+- runFlow:
+    file: ../helpers/directory-controls.yaml
+- scrollUntilVisible:
+    element:
+      id: pokemon-result-count
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-result-count
+    text: Showing 24 of 1,025 Pokémon.*
+# And I can open Bulbasaur from its card
+- scrollUntilVisible:
+    element:
+      id: pokemon-open-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: pokemon-open-1
+    waitToSettleTimeoutMs: 500
+- extendedWaitUntil:
+    visible:
+      id: pokemon-detail-number
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: pokemon-detail-name
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: pokemon-detail-name
+    text: Bulbasaur

@@ -1,0 +1,79 @@
+appId: com.anonymous.pokefolio
+name: TYPE-002 Read the matchup matrix
+properties:
+  scenarioId: TYPE-002
+  feature: e2e/features/types.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I open the type matchup matrix
+- tapOn:
+    id: nav-type-chart
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: type-cell-electric-water
+    direction: DOWN
+    timeout: 30000
+    waitToSettleTimeoutMs: 500
+# Then Fire against Grass shows double damage
+- swipe:
+    from:
+      id: type-cell-fire-water
+    direction: LEFT
+    duration: 1500
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-cell-fire-grass
+    text: "fire against grass: 2 times damage"
+# And Fire against Water shows half damage
+- swipe:
+    from:
+      id: type-cell-fire-grass
+    direction: RIGHT
+    duration: 1500
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-cell-fire-water
+    text: "fire against water: 0.5 times damage"
+# And Fire against Normal shows normal damage
+- assertVisible:
+    id: type-cell-fire-normal
+    text: "fire against normal: 1 times damage"
+# And Electric against Ground shows zero damage
+- swipe:
+    from:
+      id: type-cell-electric-water
+    direction: LEFT
+    duration: 1500
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-cell-electric-ground
+    text: "electric against ground: 0 times damage"
+# When I select Water using a matrix heading
+- swipe:
+    from:
+      id: type-cell-electric-ground
+    direction: RIGHT
+    duration: 1500
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: type-heading-water
+    direction: UP
+    timeout: 30000
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: type-heading-water
+    waitToSettleTimeoutMs: 500
+# Then the type summary changes to Water
+- scrollUntilVisible:
+    element:
+      id: type-summary-name
+    direction: UP
+    timeout: 30000
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-summary-name
+    text: Water, at a glance\.

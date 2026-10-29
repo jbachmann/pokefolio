@@ -1,0 +1,5 @@
+appId: com.anonymous.pokefolio
+---
+- runFlow: reset-app.yaml
+- runFlow:
+    file: ../helpers/directory-controls.yaml

@@ -1,0 +1,101 @@
+appId: com.anonymous.pokefolio
+name: TYPE-001 Explore strengths, weaknesses, and immunities
+properties:
+  scenarioId: TYPE-001
+  feature: e2e/features/types.feature
+tags:
+  - smoke
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I open the type chart and select Fire
+- tapOn:
+    id: nav-type-chart
+    waitToSettleTimeoutMs: 500
+- runFlow:
+    file: ../helpers/select-type.yaml
+    env:
+      TYPE: fire
+      TITLE: Fire
+# Then its strengths are Grass, Ice, Bug, and Steel
+- scrollUntilVisible:
+    element:
+      id: type-strong-grass
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-strong-grass
+- scrollUntilVisible:
+    element:
+      id: type-strong-ice
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-strong-ice
+- scrollUntilVisible:
+    element:
+      id: type-strong-bug
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-strong-bug
+- scrollUntilVisible:
+    element:
+      id: type-strong-steel
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-strong-steel
+# And its weaknesses are Water, Ground, and Rock
+- scrollUntilVisible:
+    element:
+      id: type-weak-water
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-weak-water
+- scrollUntilVisible:
+    element:
+      id: type-weak-ground
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-weak-ground
+- scrollUntilVisible:
+    element:
+      id: type-weak-rock
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-weak-rock
+# When I select Ground
+- runFlow:
+    file: ../helpers/select-type.yaml
+    env:
+      TYPE: ground
+      TITLE: Ground
+# Then its immunities include Electric
+- scrollUntilVisible:
+    element:
+      id: type-immune-electric
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: type-immune-electric

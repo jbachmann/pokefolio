@@ -1,0 +1,56 @@
+appId: com.anonymous.pokefolio
+name: TEAM-001 Create a team from the empty collection
+properties:
+  scenarioId: TEAM-001
+  feature: e2e/features/teams.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# When I open My teams
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+# Then I see the first-team invitation
+- assertVisible: Every adventure starts with a friend\.
+# When I start creating a team
+- tapOn:
+    text: Create a team
+    waitToSettleTimeoutMs: 500
+# And I enter a whitespace-only name
+- tapOn:
+    id: team-name
+    waitToSettleTimeoutMs: 500
+- inputText: "   "
+# Then creating the team is disabled
+- assertVisible:
+    id: team-save
+    enabled: false
+# When I enter "  Evergreen Six  " and create the team
+- tapOn:
+    id: team-name
+    waitToSettleTimeoutMs: 500
+- eraseText: 100
+- inputText: "  Evergreen Six  "
+- tapOn:
+    id: team-save
+    waitToSettleTimeoutMs: 500
+# Then the selected team is named "Evergreen Six"
+- assertVisible:
+    id: team-selected-name
+    text: Evergreen Six
+# And it has no partners or populated analysis
+- assertVisible:
+    id: team-member-count
+    text: 0 of 6 partners.*
+- scrollUntilVisible:
+    element:
+      id: team-analysis-empty
+    direction: DOWN
+    timeout: 30000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-analysis-empty
+- assertNotVisible:
+    id: team-base-stat-total

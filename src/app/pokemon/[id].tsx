@@ -118,6 +118,8 @@ function EvolutionTree({
               asChild
             >
               <Pressable
+                testID={"evolution-open-" + id}
+                accessibilityLabel={title(node.species.name) + ": " + (conditions.join(" / ") || "The beginning of the journey")}
                 style={StyleSheet.flatten([
                   styles.evolutionCard,
                   selected === id && {
@@ -304,7 +306,7 @@ function PokemonDetailsContent({ id }: { id: number }) {
                       opacity: 0.075,
                     }}
                   />
-                  <T style={styles.giantNumber}>{number(id)}</T>
+                  <T testID="pokemon-detail-number" style={styles.giantNumber}>{number(id)}</T>
                   <IconButton
                     style={{
                       position: "absolute",
@@ -316,6 +318,8 @@ function PokemonDetailsContent({ id }: { id: number }) {
                     name={favorites.includes(id) ? "heart" : "heart-outline"}
                     color={favorites.includes(id) ? C.red : C.green}
                     label="Toggle favorite"
+                    testID="pokemon-detail-favorite"
+                    selected={favorites.includes(id)}
                     onPress={() => toggleFavorite(id)}
                   />
                   <Float style={{ width: "100%", height: mobile ? 285 : 350 }}>
@@ -344,7 +348,7 @@ function PokemonDetailsContent({ id }: { id: number }) {
                       flexWrap: "wrap",
                     }}
                   >
-                    <T style={styles.name}>{title(pokemon.name)}</T>
+                    <T testID="pokemon-detail-name" style={styles.name}>{title(pokemon.name)}</T>
                     {(species?.is_legendary || species?.is_mythical) && (
                       <View
                         style={{
@@ -364,10 +368,11 @@ function PokemonDetailsContent({ id }: { id: number }) {
                   </T>
                   <View style={{ flexDirection: "row", gap: 7, marginTop: 19 }}>
                     {pokemon.types.map((t) => (
-                      <TypeBadge type={t} key={t} />
+                      <TypeBadge testID={"pokemon-detail-type-" + t} type={t} key={t} />
                     ))}
                   </View>
                   <T
+                    testID={description ? "pokemon-field-notes" : "pokemon-field-notes-loading"}
                     style={{
                       fontSize: 14,
                       lineHeight: 24,
@@ -425,7 +430,7 @@ function PokemonDetailsContent({ id }: { id: number }) {
                             size={14}
                             color="#86967A"
                           />
-                          <T style={{ fontSize: 13, fontWeight: "600" }}>
+                          <T testID={"pokemon-fact-" + f.label.toLowerCase()} style={{ fontSize: 13, fontWeight: "600" }}>
                             {f.value}
                           </T>
                         </View>
@@ -437,7 +442,7 @@ function PokemonDetailsContent({ id }: { id: number }) {
                   >
                     ABILITIES
                   </T>
-                  <T style={{ marginTop: 8, fontSize: 13 }}>
+                  <T testID="pokemon-abilities" style={{ marginTop: 8, fontSize: 13 }}>
                     {pokemon.abilities.map(title).join("  ·  ")}
                   </T>
                   <Button
@@ -472,7 +477,7 @@ function PokemonDetailsContent({ id }: { id: number }) {
                     <T style={{ width: 78, fontSize: 11, color: C.muted }}>
                       {label}
                     </T>
-                    <T style={{ width: 32, fontSize: 12, fontWeight: "700" }}>
+                    <T testID={"pokemon-stat-" + i} style={{ width: 32, fontSize: 12, fontWeight: "700" }}>
                       {pokemon.stats[i]}
                     </T>
                     <View style={styles.track}>
@@ -496,6 +501,7 @@ function PokemonDetailsContent({ id }: { id: number }) {
                 <View style={styles.total}>
                   <T style={{ fontWeight: "700", fontSize: 12 }}>Total</T>
                   <T
+                    testID="pokemon-stat-total"
                     style={{
                       fontFamily: font.display,
                       fontSize: 24,
@@ -540,7 +546,7 @@ function PokemonDetailsContent({ id }: { id: number }) {
                           gap: 6,
                         }}
                       >
-                        <TypeBadge type={w.type} />
+                        <TypeBadge testID={"pokemon-weakness-" + w.type} type={w.type} />
                         <T
                           style={{
                             fontSize: 10,

@@ -1,0 +1,14 @@
+appId: com.anonymous.pokefolio
+---
+- runFlow:
+    file: ../helpers/pick-partner.yaml
+    env:
+      POKEMON_ID: ${POKEMON_ID}
+- tapOn:
+    id: picker-team-${TEAM}
+    waitToSettleTimeoutMs: 500
+- extendedWaitUntil:
+    notVisible: A new team member
+    timeout: 10000
+- runFlow:
+    file: ../helpers/wait-for-notice.yaml

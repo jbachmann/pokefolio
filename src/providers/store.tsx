@@ -209,6 +209,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         )}
         {teams.map((team) => (
           <Pressable
+            testID={"picker-team-" + team.name}
             key={team.id}
             onPress={() => addToTeam(team)}
             accessibilityRole="button"
@@ -233,6 +234,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           Start a fresh adventure
         </T>
         <TextInput
+          testID="picker-team-name"
           accessibilityLabel="New team name"
           placeholder="Give your team a name"
           placeholderTextColor={C.muted}
@@ -242,6 +244,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           style={styles.input}
         />
         <Button
+          testID="picker-create-team"
           style={{ marginTop: 12 }}
           onPress={() => {
             if (!selected) return;
@@ -261,6 +264,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       </Sheet>
       {!!toast && (
         <Pressable
+          testID="collection-notice"
           accessibilityRole="alert"
           onPress={() => setToast("")}
           style={styles.toast}

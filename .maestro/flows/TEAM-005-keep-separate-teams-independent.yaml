@@ -1,0 +1,151 @@
+appId: com.anonymous.pokefolio
+name: TEAM-005 Keep separate teams independent
+properties:
+  scenarioId: TEAM-005
+  feature: e2e/features/teams.feature
+---
+# Given I open Pokéfolio with no saved application data
+- runFlow:
+    file: ../helpers/fresh-launch.yaml
+# Given I have two teams with different partners
+- runFlow:
+    file: ../helpers/create-team.yaml
+    env:
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "1"
+      TEAM: Trail Friends
+- runFlow:
+    file: ../helpers/create-team.yaml
+    env:
+      TEAM: River Friends
+- runFlow:
+    file: ../helpers/add-partner.yaml
+    env:
+      POKEMON_ID: "4"
+      TEAM: River Friends
+# When I switch between the teams
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: team-tab-Trail Friends
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-member-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-1
+- assertNotVisible:
+    id: team-member-4
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: team-tab-River Friends
+    waitToSettleTimeoutMs: 500
+# Then each team shows its own roster
+- assertVisible:
+    id: team-selected-name
+    text: River Friends
+- assertVisible:
+    id: team-member-count
+    text: 1 of 6 partners.*
+- scrollUntilVisible:
+    element:
+      id: team-member-4
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-4
+- assertNotVisible:
+    id: team-member-1
+# When I remove a partner from one team
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: team-tab-Trail Friends
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-member-1
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-1
+- scrollUntilVisible:
+    element:
+      text: Remove bulbasaur from team
+    direction: UP
+    timeout: 10000
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    text: Remove bulbasaur from team
+    waitToSettleTimeoutMs: 500
+- runFlow:
+    file: ../helpers/wait-for-notice.yaml
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-count
+    text: 0 of 6 partners.*
+# Then the other team's roster is unchanged
+- tapOn:
+    id: team-tab-River Friends
+    waitToSettleTimeoutMs: 500
+- tapOn:
+    id: nav-teams
+    waitToSettleTimeoutMs: 500
+- scrollUntilVisible:
+    element:
+      id: team-selected-name
+    direction: UP
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-selected-name
+    text: River Friends
+- assertVisible:
+    id: team-member-count
+    text: 1 of 6 partners.*
+- scrollUntilVisible:
+    element:
+      id: team-member-4
+    direction: DOWN
+    timeout: 10000
+    centerElement: false
+    waitToSettleTimeoutMs: 500
+- assertVisible:
+    id: team-member-4

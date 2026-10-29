@@ -27,6 +27,7 @@ export function PokemonCard({
           asChild
         >
           <Pressable
+            testID={"pokemon-open-" + pokemon.id}
             accessibilityLabel={"View " + title(pokemon.name)}
             style={styles.main}
           >
@@ -46,6 +47,7 @@ export function PokemonCard({
             />
             <View style={styles.info}>
               <T
+                testID={"pokemon-result-" + index + "-name"}
                 numberOfLines={1}
                 style={[styles.name, width < 650 && { fontSize: 18 }]}
               >
@@ -60,6 +62,7 @@ export function PokemonCard({
           </Pressable>
         </Link>
         <Pressable
+          testID={"pokemon-favorite-" + pokemon.id}
           accessibilityRole="button"
           accessibilityLabel={
             (favorite ? "Unfavorite " : "Favorite ") + title(pokemon.name)
@@ -75,6 +78,7 @@ export function PokemonCard({
           />
         </Pressable>
         <Pressable
+          testID={"pokemon-add-" + pokemon.id}
           accessibilityRole="button"
           accessibilityLabel={"Add " + title(pokemon.name) + " to a team"}
           onPress={() => pickTeam(pokemon)}
